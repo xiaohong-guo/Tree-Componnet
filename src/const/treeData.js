@@ -245,6 +245,12 @@ const originTreeData = [
   {
     title: 'parent 4',
     key: '0-3',
+    children: [
+      {
+        title: 'parent 4-0',
+        key: '0-3-0'
+      }
+    ]
   }
 ];
 

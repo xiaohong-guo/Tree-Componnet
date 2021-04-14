@@ -23,3 +23,7 @@
 .line-item-H {
   position: absolute;
 }
+.no-icon-item {
+  display: inline-block;
+  width: 25px;
+}

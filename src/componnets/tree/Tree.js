@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/style-prop-object */
 /* eslint-disable array-callback-return */
 import React from 'react';
@@ -7,7 +8,8 @@ import {
   updateNode, 
   getLeafCountTree,
   findAllParentNode,
-  updateSomeNode
+  updateSomeNode,
+  isSameLevelLastNode
 } from '../../utils/index.js';
 import { PlusSquareOutlined, MinusSquareOutlined } from '@ant-design/icons';
 
@@ -19,7 +21,7 @@ const Tree = ({ treeData }) => {
   const renderLine = (width, obj) => (
     <>
       {
-        !obj.isLeaf && obj.deep ? (
+        !obj.isLeaf && obj.deep && !isSameLevelLastNode(data, obj) ? (
           <svg xmlns="http://wwww.w3.org/2000/svg" height={obj.deep * 24} className="line-item">
             <line 
               x1={ width * 1.5} 
@@ -140,6 +142,11 @@ const Tree = ({ treeData }) => {
         <div>
           {obj.isLeaf ? renderLine(16 * (obj.level + 3), obj) : renderLine(16 * obj.level, obj)}
           <span className="tree-node-content">
+           {
+             !obj.isLeaf ? (
+              <span className="no-icon-item"></span>
+             ) : null
+           }
             <span>{obj.title}</span>
           </span>
         </div>

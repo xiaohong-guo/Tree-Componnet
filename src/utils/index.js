@@ -28,21 +28,44 @@ function getLeafCountTree(obj, type) {
  * @returns 当前节点的直接上级父节点
  */
 function findParentNode(source,obj) {
-  const parentKey = obj.key.slice(0, obj.key.length - 2);
   let parentNode = null;
-  Array.isArray(source) && source.forEach(item => {
-    if(!item.children) {
+  if(obj.level === 1) {
+    parentNode = source;
+  }
+  const forFn = (data, obj) => {
+    const parentKey = obj.level !== 1 && obj.key.slice(0, obj.key.length - 2);
+    Array.isArray(data) && data.forEach(item => {
       if(item.key === parentKey) {
-        parentNode=item;
+        parentNode = item
+      } else {
+        if(item.children) {
+          forFn(item.children, obj)
+        }
       }
-    } else {
-      if(item.key === parentKey) {
-        parentNode=item;
-      }
-      findParentNode(item.children, obj);
-    }
-  })
+    })
+  }
+  forFn(source, obj);
   return parentNode;
+}
+
+/**
+ * 判断当前节点是否为同层级的最后一个节点
+ * @param {*} source 数据源
+ * @param {*} obj 当前节点
+ * @returns boolean value
+ */
+ const isSameLevelLastNode = (source, obj) => {
+  // 直属父级
+  const parentNode = findParentNode(source, obj);
+  const len = Array.isArray(parentNode) ? parentNode.length : parentNode?.children?.length;
+  console.log(parentNode);
+  let isLastNode = false;
+  if(Array.isArray(parentNode)) {
+    isLastNode = parentNode[len - 1].key === obj.key;
+  } else {
+    isLastNode =  parentNode?.children[len-1].key === obj.key;
+  }
+  return isLastNode;
 }
 
 /**
@@ -134,13 +157,22 @@ const updateNode = (source, obj, newVal) => {
 }
 
 /**
+ * 为🌲标记叶子节点
+ * @param {*} source 
+ * @returns 标记叶子节点
+ */
+const setLeaf = (source) => {
+
+  return source;
+}
+/**
  * 对treeData🌲形结构进行处理, 添加节点的层级、画线的深度等作图需要的信息
  * @param {*} data 数据源
  * @param {*} maxLevel 最大层级
  * @param {*} currLevel 当前层级
  * @returns 处理后的数据
  */
-const reduceTreeData = function(data, maxLevel, currLevel = 0) {
+const reduceTreeData = function(data, maxLevel, currLevel = 0, levelArr=[]) {
 	if (!(data instanceof Array)) throw new TypeError('The data should be an array!');
 	let result = [];
 	for (let k = 0; k < data.length; k++) {
@@ -162,20 +194,24 @@ const reduceTreeData = function(data, maxLevel, currLevel = 0) {
       }
       // 计算tree每个子节点的层级level
 			currLevel++
-			newNode.children = reduceTreeData(temp.children, maxLevel, currLevel);
+      levelArr.push(currLevel)
+			newNode.children = reduceTreeData(temp.children, maxLevel, currLevel, levelArr);
 			currLevel--  
       newNode.deep = getLeafCountTree(temp, 'children') + 1
       newNode.backupChild = newNode.children;
-		} else {
-      // 判断是否为叶子节点
-      if(newNode.level !== 1 ) {
-        newNode.isLeaf = true;
+		}  else {
+      if(newNode.level !== 1) {
+        newNode.isLeaf = true
       }
     }
+    // if(newNode.level === Math.max.apply(null, levelArr) + 1) {
+    //   newNode.isLeaf = true;
+    // }
 		result.push(newNode);
 	}
 	return result;
 }
+
 
 export {
   reduceTreeData,
@@ -183,5 +219,6 @@ export {
   getLeafCountTree,
   findParentNode,
   findAllParentNode,
-  updateSomeNode
+  updateSomeNode,
+  isSameLevelLastNode
 }
