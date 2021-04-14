@@ -1,4 +1,10 @@
 
+/**
+ * 获取某个节点的子节点与及子孙节点的总个数
+ * @param {*} obj 节点
+ * @param {*} type 节点子节点key值
+ * @returns 子节点+子孙节点总数
+ */
 function getLeafCountTree(obj, type) {
   let val = obj[type];
   if(!val || !val.length){
@@ -15,6 +21,12 @@ function getLeafCountTree(obj, type) {
   }
 }
 
+/**
+ * 找某个节点的父节点
+ * @param {*} source 数据源
+ * @param {*} obj 当前节点
+ * @returns 当前节点的直接上级父节点
+ */
 function findParentNode(source,obj) {
   const parentKey = obj.key.slice(0, obj.key.length - 2);
   let parentNode = null;
@@ -33,14 +45,21 @@ function findParentNode(source,obj) {
   return parentNode;
 }
 
- function findAllParentNode (arr1, id, type) {
+/**
+ * 查找某个节点的所有父节点
+ * @param {*} source 数据源
+ * @param {*} id 当前节点字段值
+ * @param {*} type 以哪个字段去查找
+ * @returns 当前节点的所有父节点
+ */
+ function findAllParentNode (source, id, type) {
   var temp = []
   var forFn = function (arr, id) {
     for (var i = 0; i < arr.length; i++) {
       var item = arr[i]
       if (item[type] === id) {
         temp.push(item)
-        forFn(arr1, item[type].slice(0, item[type].length -2))
+        forFn(source, item[type].slice(0, item[type].length -2))
         break
       } else {
         if (item.children) {
@@ -49,10 +68,17 @@ function findParentNode(source,obj) {
       }
     }
   }
-  forFn(arr1, id)
+  forFn(source, id)
   return temp
 }
 
+/**
+ * 更新多个子节点
+ * @param {*} source 数据源
+ * @param {*} newNodeList 更新值
+ * @param {*} type 操作类型
+ * @returns 更新后的数据
+ */
 const updateSomeNode = (source, newNodeList, type) => {
   let res = null;
   if(Array.isArray(newNodeList)) {
@@ -77,6 +103,13 @@ const updateSomeNode = (source, newNodeList, type) => {
   return res;
 }
 
+/**
+ * 更新单一子节点
+ * @param {*} source 数据源
+ * @param {*} obj 需要被更新的节点
+ * @param {*} newVal 需要被更新的节点的新值
+ * @returns 更新后的数据
+ */
 const updateNode = (source, obj, newVal) => {
   if(Array.isArray(source)) {
     source.map(item => {
@@ -100,6 +133,13 @@ const updateNode = (source, obj, newVal) => {
   return source;
 }
 
+/**
+ * 对treeData🌲形结构进行处理, 添加节点的层级、画线的深度等作图需要的信息
+ * @param {*} data 数据源
+ * @param {*} maxLevel 最大层级
+ * @param {*} currLevel 当前层级
+ * @returns 处理后的数据
+ */
 const reduceTreeData = function(data, maxLevel, currLevel = 0) {
 	if (!(data instanceof Array)) throw new TypeError('The data should be an array!');
 	let result = [];

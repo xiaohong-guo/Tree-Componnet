@@ -4,10 +4,6 @@
   width: 500px;
   min-width: 500px;
 }
-.tree-node {
-  line-height: 100px;
-  height: 100px;
-}
 .line-item {
   position: absolute;
   margin: auto;
