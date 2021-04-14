@@ -1,25 +1,15 @@
-import logo from './logo.svg';
-import './App.css';
+/* eslint-disable react/style-prop-object */
+/* eslint-disable array-callback-return */
+import React from 'react';
+import { originTreeData } from './const/treeData.js';
+import Tree from './componnets/tree/Tree';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <Tree treeData={originTreeData}/>
     </div>
-  );
+  )
 }
 
 export default App;
