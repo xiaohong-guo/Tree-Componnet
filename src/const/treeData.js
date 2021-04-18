@@ -3,13 +3,13 @@ const TreeData = [
     title: 'parent 1',
     key: '0-0',
     level: 1,
-    moveLevel: 10,
+    deep: 10,
     children: [
       {
         title: 'parent 1-0',
         key: '0-0-0',
         level: 2,
-        moveLevel: 4,
+        deep: 4,
         needRelatedLeaf: true,
         children: [
           {

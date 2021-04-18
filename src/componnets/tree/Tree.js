@@ -6,16 +6,15 @@ import './Tree.css';
 import { 
   reduceTreeData, 
   updateNode, 
-  getLeafCountTree,
+  getLeafCount,
   findAllParentNode,
   updateSomeNode,
-  isSameLevelLastNode
+  isSameLevelLastNode,
 } from '../../utils/index.js';
 import { PlusSquareOutlined, MinusSquareOutlined } from '@ant-design/icons';
 
 const Tree = ({ treeData }) => {
   const reducedData = reduceTreeData(treeData);
-  const [originData] = React.useState(reducedData);
   const [data, setData] = React.useState(reducedData);
 
   const renderLine = (width, obj) => (
@@ -28,7 +27,7 @@ const Tree = ({ treeData }) => {
               y1="26" 
               x2={ width*1.5 } 
               y2={obj.deep * 24} 
-              style={{stroke: 'silver', strokeWidth: 1}}
+              style={{stroke: 'black', strokeWidth: 1}}
             />
           </svg>
         ) : null
@@ -41,8 +40,8 @@ const Tree = ({ treeData }) => {
                 x1={ width * 2.2} 
                 y1="26" 
                 x2={ width*2.2 }
-                y2={(obj.children.length + 0.75) * 24 - 2} 
-                style={{stroke: 'silver', strokeWidth: 1}}
+                y2={obj?.children?.length ? ((obj.children.length + 0.75) * 24 - 2) : 26} 
+                style={{stroke: 'blue', strokeWidth: 1}}
               />
             </svg>
           </>
@@ -57,7 +56,7 @@ const Tree = ({ treeData }) => {
                 y1="0" 
                 x2="16" 
                 y2="0" 
-                style={{stroke: 'silver', strokeWidth: 1}}
+                style={{stroke: 'red', strokeWidth: 1}}
               />
             </svg>
           </>
@@ -78,20 +77,20 @@ const Tree = ({ treeData }) => {
 
 
   const handlePlus = (e, obj) => {
-    let res = updateNode(data, obj, {
+    let res = null;
+    res = updateNode(data, obj, {
       open: false,
       children: [],
       deep: 1
     })
-    const parentKey = obj.key.slice(0, obj.key.length -2);
-    let parentNodeList = findAllParentNode(data, parentKey, 'key');
-    if(parentNodeList?.length) {
-      res = updateSomeNode(res,parentNodeList, 'plus');
+    if(obj.level !== 1) {
+      const parentKey =  obj.key.slice(0, obj.key.length -2);
+      let parentNodeList = findAllParentNode(data, parentKey, 'key');
+      console.log('parentNodeList', parentNodeList);
+      if(parentNodeList?.length) {
+        res = updateSomeNode(data,parentNodeList);
+      }
     }
-    parentNodeList?.length && parentNodeList.forEach(node => {
-
-      console.log('deep', getLeafCountTree(node, 'children'))
-    })
     setData([...res]);
   
   }
@@ -104,12 +103,12 @@ const Tree = ({ treeData }) => {
     let res = updateNode(data, obj, {
       open: true,
       children: children,
-      deep: getLeafCountTree(obj, 'backupChild') + 1
+      deep: getLeafCount(obj, 'backupChild') + 1
     })
-    const parentKey = obj.key.slice(0, obj.key.length -2);
-    let parentNodeList = findAllParentNode(data, parentKey, 'key');
+    const parentKey = obj.level === 1 ? obj.key: obj.key.slice(0, obj.key.length -2);
+    let parentNodeList = findAllParentNode(res, parentKey, 'key');
     if(parentNodeList?.length) {
-      res = updateSomeNode(res,parentNodeList, 'minus');
+      res = updateSomeNode(res,parentNodeList);
     }
     setData([...res]);
   }
@@ -153,6 +152,9 @@ const Tree = ({ treeData }) => {
       )
     )
   )
+
+  React.useEffect(() => {
+  } ,[])
 
   return (
     <div className="tree-container">
