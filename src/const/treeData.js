@@ -157,6 +157,16 @@ const originTreeData = [
           {
             title: 'leaf1-0-1',
             key: '0-0-0-0',
+            children: [
+             {
+                title: '0-0-0-0-0',
+                key: '0-0-0-0-0',
+             },
+             {
+                title: '0-0-0-0-1',
+                key: '0-0-0-0-1'
+             }
+            ]
           },
           {
             title: 'leaf1-0-2',
@@ -232,7 +242,7 @@ const originTreeData = [
           },
           {
             title: 'leaf3-0-1',
-            key: '0-2-0-0-2',
+            key: '0-2-0-2',
           },
           {
             title: 'leaf3-0-2',

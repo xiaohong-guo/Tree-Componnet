@@ -1,5 +1,5 @@
 
-function getLeafCount(obj, type) {
+function getLeafCount(obj, type, y) {
   if(!obj[type] || (obj[type] && !obj[type].length)){
     return 1;
   } else{
@@ -9,7 +9,7 @@ function getLeafCount(obj, type) {
       if(obj[type][i][type] && obj[type][i][type].length) {
         leafCount = leafCount + getLeafCount(obj[type][i][type], type);
       }
-        leafCount = leafCount + getLeafCount(obj[type][i],type);
+      leafCount = leafCount + getLeafCount(obj[type][i],type);
     }
     return leafCount;
   }
@@ -143,33 +143,14 @@ const updateSomeNode = (source, newNodeList) => {
   return res;
 }
 
-
-
-
-const getMaxLevel  = (treeData) => {
-  let max = 0
-  const getLevel  = (data) => {
-    data.forEach(e => {
-      if (e.level > max) {
-        max = e.level
-      }
-      if (e?.children?.length > 0) {
-        getLevel(e.children)
-      }
-    })
-  }
-  getLevel(treeData)
-  return max;
-}
-
 const setLeafAttr = (treeData) => {
-  let maxLevel = getMaxLevel(treeData);
   const setLeaf = (data) => {
     data.map(item => {
-      if(item.level === maxLevel) {
-        item.isLeaf = true;
-      } else {
-        item.isLeaf = false;
+      if(!item.children || !item.children.length) {
+        let parentNode = findParentNode(treeData, item);
+        if(parentNode && parentNode.children && parentNode.children.length > 1) {
+          item.isLeaf = true
+        }
       }
       if(item?.children?.length) {
         setLeaf(item.children);
@@ -178,25 +159,6 @@ const setLeafAttr = (treeData) => {
     })
   }
   setLeaf(treeData);
-  return treeData;
-}
-
-const setRelatedLeafAttr = (treeData) => {
-  if(!Array.isArray(treeData)) {
-    throw new Error('type error')
-  }
-  const setNeedLeaf = (data) => {
-    data.map(item => {
-      if(item.children && item.children.every(child => child.isLeaf)) {
-        item.needRelatedLeaf = true;
-      } 
-      if(item?.children?.length) {
-        setNeedLeaf(item.children)
-      }
-      return item;
-    })
-  }
-  setNeedLeaf(treeData)
   return treeData;
 }
 
@@ -226,15 +188,11 @@ const reduceTreeData = function(data, currLevel = 0) {
 			newNode.children = reduceTreeData(temp.children, currLevel);
 			currLevel--  
       newNode.deep = getLeafCount(temp, 'children') + 1
-      // if(newNode.key === '0-0-0') {
-      //   console.log('---',getLeafCount(temp) + 1);
-      // }
       newNode.backupChild = newNode.children;
 		}
 		levelTree.push(newNode);
 	}
-  const leafTree = setLeafAttr(levelTree)
-  const result = setRelatedLeafAttr(leafTree);
+  const result = setLeafAttr(levelTree)
 	return result;
 }
 

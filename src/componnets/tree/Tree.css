@@ -3,6 +3,7 @@
   margin-left: 100px;
   width: 500px;
   min-width: 500px;
+  position: absolute;
 }
 .line-item {
   position: absolute;
@@ -22,6 +23,7 @@
 }
 .line-item-H {
   position: absolute;
+  margin-left: -10.5px;
 }
 .no-icon-item {
   display: inline-block;
