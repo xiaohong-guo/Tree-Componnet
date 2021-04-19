@@ -150,6 +150,9 @@ const setLeafAttr = (treeData) => {
         let parentNode = findParentNode(treeData, item);
         if(parentNode && parentNode.children && parentNode.children.length > 1) {
           item.isLeaf = true
+          if(parentNode.children[parentNode.children.length-1].key === item.key) {
+            item.isLast = true
+          }
         }
       }
       if(item?.children?.length) {

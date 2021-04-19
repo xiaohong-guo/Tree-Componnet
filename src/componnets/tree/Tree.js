@@ -21,13 +21,13 @@ const Tree = ({ treeData }) => {
     <>
       {
         !obj.isLeaf && obj.deep && !isSameLevelLastNode(data, obj) ? (
-          <svg xmlns="http://wwww.w3.org/2000/svg" height={obj.deep * 24} className="line-item">
+          <svg xmlns="http://wwww.w3.org/2000/svg" height={obj.deep * 24 + 5} className="line-item">
             <line 
               x1={ width + 10} 
               y1="24" 
               x2={ width + 10 } 
-              y2={obj.deep * 24} 
-              style={{stroke: 'black', strokeWidth: 1}}
+              y2={obj.deep * 24 + 5} 
+              style={{stroke: 'silver', strokeWidth: 1}}
             />
           </svg>
         ) : null
@@ -36,18 +36,26 @@ const Tree = ({ treeData }) => {
         obj.isLeaf ? (
           <>
             <svg 
-              width="32" 
-              height="32" 
+              height="30" 
               xmlns="http://wwww.w3.org/2000/svg" 
               className="line-item-H" 
               style={{ left: `${(obj.level + 1) * 20}`}}
             >
-              <polyline
-                points="0,0 0,24 16,24"
-                fill="transparent"
-                stroke="black"
-                strokeWidth="1"
-              ></polyline>
+              {
+                obj.isLast ? 
+                <polyline
+                  points="0,0 0,16 16,16"
+                  fill="none"
+                  stroke="silver"
+                  strokeWidth="1"
+                ></polyline> : 
+                <polyline
+                  points="0,0 0,30 0,16 16,16"
+                  fill="none"
+                  stroke="silver"
+                  strokeWidth="1"
+                ></polyline>
+              }
             </svg>
           </>
         ) : null

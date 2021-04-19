@@ -12,8 +12,8 @@
 .tree-node-content {
   display: inline-block;
   height: 20px;
-  line-height: 20px;
   white-space: nowrap;
+
 }
 .icon-item {
   margin-right: 10px;
@@ -23,7 +23,7 @@
 }
 .line-item-H {
   position: absolute;
-  margin-left: -10.5px;
+  margin-left: -10px;
 }
 .no-icon-item {
   display: inline-block;
