@@ -21,12 +21,12 @@ const Tree = ({ treeData }) => {
     <>
       {
         !obj.isLeaf && obj.deep && !isSameLevelLastNode(data, obj) ? (
-          <svg xmlns="http://wwww.w3.org/2000/svg" height={obj.deep * 24} className="line-item">
+          <svg xmlns="http://wwww.w3.org/2000/svg" height={obj.deep * 24 + 5} className="line-item">
             <line 
               x1={ width + 10} 
               y1="25" 
               x2={ width + 10 } 
-              y2={obj.deep * 24} 
+              y2={ obj.open ? obj.deep * 24 +5 : '25'} 
               style={{stroke: 'silver', strokeWidth: 1}}
             />
           </svg>
